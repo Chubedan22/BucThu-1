@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thiệp 8/3</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #ffb6c1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            position: relative;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .envelope {
+            position: relative;
+            width: 500px;
+            height: 300px;
+            background: #d32f2f;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            flex-direction: column;
+        }
+        .open-text {
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 3px solid yellow;
+            display: inline-block;
+            background: rgba(255, 255, 0, 0.3);
+        }
+        .letter {
+            position: absolute;
+            width: 450px;
+            height: 270px;
+            background: white;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 50%) scale(0.8);
+            opacity: 0;
+            transition: all 1s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            font-size: 1.5em;
+            font-weight: bold;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .envelope.open .letter {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="heartCanvas"></canvas>
+    <canvas id="flowerCanvas"></canvas>
+    <div class="envelope" onclick="openEnvelope()">
+        <div class="open-text">Ấn đây để mở</div>
+        <div class="letter" id="letter">Chúc các bạn nữ 11A4 ngày 8/3 ngập tràn niềm vui, hạnh phúc và ngập tràn hoa tươi và những món quà bất ngờ. Chúc các bạn luôn tươi tắn, rạng ngời và gặt hái nhiều thành công trong cuộc đời. Mong các bạn nữ 11A4 luôn tự tin, yêu đời và biến mọi ước mơ thành hiện thực. Chúc các bạn luôn là những đóa hoa rực rỡ nhất của lớp 11A4.</div>
+    </div>
+    <script>
+        function openEnvelope() {
+            document.querySelector(".envelope").classList.toggle("open");
+        }
+        
+        const canvas = document.getElementById("heartCanvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let hearts = [];
+        function createHeart() {
+            return {
+                x: Math.random() * canvas.width,
+                y: canvas.height + Math.random() * 100,
+                size: Math.random() * 20 + 10,
+                speed: Math.random() * 2 + 1,
+                opacity: Math.random() * 0.5 + 0.5
+            };
+        }
+        for (let i = 0; i < 50; i++) {
+            hearts.push(createHeart());
+        }
+
+        function drawHeart(x, y, size, opacity) {
+            ctx.fillStyle = `rgba(255, 0, 0, ${opacity})`;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.bezierCurveTo(x - size, y - size, x - size * 1.5, y + size / 2, x, y + size);
+            ctx.bezierCurveTo(x + size * 1.5, y + size / 2, x + size, y - size, x, y);
+            ctx.fill();
+        }
+
+        function animateHearts() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let heart of hearts) {
+                heart.y -= heart.speed;
+                drawHeart(heart.x, heart.y, heart.size, heart.opacity);
+                if (heart.y < -10) {
+                    heart.y = canvas.height + 10;
+                    heart.x = Math.random() * canvas.width;
+                }
+            }
+            requestAnimationFrame(animateHearts);
+        }
+        animateHearts();
+    </script>
+</body>
+</html>
